@@ -5,12 +5,15 @@
   import ReverseFinder from '$lib/components/ReverseFinder.svelte';
   import ProgressionEditor from '$lib/components/ProgressionEditor.svelte';
   import MidiDownload from '$lib/components/MidiDownload.svelte';
+  import ScaleSelector from '$lib/components/ScaleSelector.svelte';
+  import ScaleDisplay from '$lib/components/ScaleDisplay.svelte';
   
   import { getDefaultTuning, type Tuning } from '$lib/music/tunings';
   import { buildChord, type Chord } from '$lib/music/chords';
   import { generateVoicings, type Voicing } from '$lib/music/voicings';
   import { type NoteName } from '$lib/music/notes';
   import { type Progression } from '$lib/music/progressions';
+  import { generateScale } from '$lib/music/scales';
 
   // State
   let tuning: Tuning = $state(getDefaultTuning());
@@ -20,7 +23,12 @@
   let currentVoicing: Voicing | null = $state(null);
   let selectedNotes: Set<number> = $state(new Set());
   let currentProgression: Progression | null = $state(null);
-  let activeView: 'chords' | 'progression' = $state('chords');
+  let activeView: 'chords' | 'progression' | 'scales' = $state('chords');
+  
+  // Scale state
+  let selectedScaleRoot: NoteName = $state('C');
+  let selectedScaleType: string = $state('major');
+  let currentScale: number[] = $state([]);
 
   // Update chord when selection changes
   function handleChordChange(root: NoteName, type: string) {
@@ -58,8 +66,19 @@
     currentProgression = progression;
   }
 
+  function handleScaleChange(root: NoteName, scaleType: string) {
+    selectedScaleRoot = root;
+    selectedScaleType = scaleType;
+    updateScale();
+  }
+
+  function updateScale() {
+    currentScale = generateScale(selectedScaleRoot, selectedScaleType, 60);
+  }
+
   // Initialize
   updateChord();
+  updateScale();
 </script>
 
 <div class="app">
@@ -75,6 +94,13 @@
       onclick={() => activeView = 'chords'}
     >
       Chord Explorer
+    </button>
+    <button
+      class="tab"
+      class:active={activeView === 'scales'}
+      onclick={() => activeView = 'scales'}
+    >
+      Scale Explorer
     </button>
     <button
       class="tab"
@@ -120,6 +146,40 @@
         />
 
         <MidiDownload chord={currentChord} />
+      </div>
+    </div>
+  {:else if activeView === 'scales'}
+    <div class="main-content">
+      <div class="left-panel">
+        <ScaleSelector
+          bind:selectedRoot={selectedScaleRoot}
+          bind:selectedScale={selectedScaleType}
+          onScaleChange={handleScaleChange}
+        />
+        
+        <div class="section">
+          <h2>Fretboard</h2>
+          <Fretboard
+            {tuning}
+            selectedNotes={new Set(currentScale.map(n => n % 12))}
+            maxFrets={15}
+          />
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="section">
+          <h2>Piano</h2>
+          <PianoView
+            activeNotes={new Set(currentScale.map(n => n % 12))}
+          />
+        </div>
+
+        <ScaleDisplay
+          scaleNotes={currentScale}
+          root={selectedScaleRoot}
+          scaleType={selectedScaleType}
+        />
       </div>
     </div>
   {:else}
