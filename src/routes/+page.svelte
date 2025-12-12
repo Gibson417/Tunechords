@@ -15,6 +15,9 @@
   import { type Progression } from '$lib/music/progressions';
   import { generateScale } from '$lib/music/scales';
 
+  // Constants
+  const MIDDLE_C = 60; // MIDI note number for middle C
+
   // State
   let tuning: Tuning = $state(getDefaultTuning());
   let selectedRoot: NoteName = $state('C');
@@ -38,7 +41,7 @@
   }
 
   function updateChord() {
-    currentChord = buildChord(selectedRoot, selectedType, 60);
+    currentChord = buildChord(selectedRoot, selectedType, MIDDLE_C);
     
     // Generate voicings
     const voicings = generateVoicings(currentChord.notes, tuning);
@@ -73,7 +76,7 @@
   }
 
   function updateScale() {
-    currentScale = generateScale(selectedScaleRoot, selectedScaleType, 60);
+    currentScale = generateScale(selectedScaleRoot, selectedScaleType, MIDDLE_C);
   }
 
   // Initialize

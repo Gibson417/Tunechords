@@ -16,14 +16,20 @@
 
   function getIntervalPattern(): string {
     const scale = SCALE_TYPES[scaleType];
-    if (!scale) return '';
+    if (!scale || scale.intervals.length < 2) return '';
     
     const intervals = scale.intervals;
     const steps: string[] = [];
     
     for (let i = 0; i < intervals.length - 1; i++) {
       const diff = intervals[i + 1] - intervals[i];
-      steps.push(diff === 2 ? 'W' : diff === 1 ? 'H' : `${diff}`);
+      if (diff === 2) {
+        steps.push('W');
+      } else if (diff === 1) {
+        steps.push('H');
+      } else {
+        steps.push(`${diff}hs`); // e.g., "3hs" for 3 half-steps
+      }
     }
     
     return steps.join(' - ');

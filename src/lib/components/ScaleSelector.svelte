@@ -34,7 +34,7 @@
 
   function getScaleDisplay(): string {
     const def = SCALE_TYPES[selectedScale];
-    return `${selectedRoot} ${def?.name || ''}`;
+    return def ? `${selectedRoot} ${def.name}` : selectedRoot;
   }
 </script>
 
