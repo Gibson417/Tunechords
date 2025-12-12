@@ -1,38 +1,42 @@
-# sv
+# 🎸 Tunechords
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Interactive Chord, Tuning & Progression Explorer built with SvelteKit + TypeScript.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **Chord Explorer**: Select chords and view them on an interactive fretboard and piano
+- **Reverse Chord Finder**: Click notes to detect possible chords
+- **Progression Builder**: Create and edit chord progressions with preset patterns
+- **MIDI Export**: Download chords and progressions as MIDI files
+- **Multiple Tunings**: Standard EADGBE, Drop D, Open G, Open D, DADGAD
+- **18 Chord Types**: Major, minor, 7ths, 9ths, suspended, diminished, augmented
+- **12 Scale Types**: Major, minor modes, pentatonic, blues, chromatic
 
-```sh
-# create a new project in the current directory
-npx sv create
+## Getting Started
 
-# create a new project in my-app
-npx sv create my-app
-```
+```bash
+# Install dependencies
+npm install
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+# Start development server
 npm run dev
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
+# Build for production
 npm run build
+
+# Type check
+npm run check
 ```
 
-You can preview the production build with `npm run preview`.
+## Architecture
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- **Music Theory Library** (`src/lib/music/`): Pure TypeScript modules for notes, chords, scales, tunings, voicings, MIDI
+- **UI Components** (`src/lib/components/`): Svelte components for fretboard, piano, chord selector, progression editor
+- **No Backend Required**: Fully client-side application
+
+## Technologies
+
+- SvelteKit 2.x
+- TypeScript (strict mode)
+- Vite
+- No external music libraries

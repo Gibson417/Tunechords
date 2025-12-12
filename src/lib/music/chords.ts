@@ -76,11 +76,6 @@ export const CHORD_TYPES: Record<string, ChordDefinition> = {
     intervals: [0, 3, 6, 10],
     symbol: 'm7b5'
   },
-  minor7b5: {
-    name: 'Minor 7th flat 5',
-    intervals: [0, 3, 6, 10],
-    symbol: 'm7b5'
-  },
   major6: {
     name: 'Major 6th',
     intervals: [0, 4, 7, 9],

@@ -40,6 +40,8 @@ export const COMMON_VOICINGS: Record<string, Record<string, (number | null)[][]>
   }
 };
 
+const MAX_FINGER_STRETCH = 4; // Maximum fret span for typical hand
+
 /**
  * Generate voicings for a chord
  */
@@ -54,7 +56,7 @@ export function generateVoicings(
   const chordPitches = new Set(chordNotes.map(note => note % 12));
   
   // Try to find voicings within reach
-  for (let baseFret = 0; baseFret <= Math.min(12, maxFret - 4); baseFret++) {
+  for (let baseFret = 0; baseFret <= Math.min(12, maxFret - MAX_FINGER_STRETCH); baseFret++) {
     const voicing: Voicing = {
       frets: [],
       notes: []
@@ -69,7 +71,7 @@ export function generateVoicings(
       let found = false;
       
       // Try frets within reach of this position
-      for (let fret = baseFret; fret <= baseFret + 4 && fret <= maxFret; fret++) {
+      for (let fret = baseFret; fret <= baseFret + MAX_FINGER_STRETCH && fret <= maxFret; fret++) {
         const note = getNoteAtFret(openString, fret);
         const pitch = note % 12;
         
@@ -143,8 +145,8 @@ export function getVoicingSpan(voicing: Voicing): number {
 }
 
 /**
- * Check if a voicing is playable (span <= 4 frets for most players)
+ * Check if a voicing is playable (span <= MAX_FINGER_STRETCH frets for most players)
  */
-export function isVoicingPlayable(voicing: Voicing, maxSpan: number = 4): boolean {
+export function isVoicingPlayable(voicing: Voicing, maxSpan: number = MAX_FINGER_STRETCH): boolean {
   return getVoicingSpan(voicing) <= maxSpan;
 }

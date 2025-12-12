@@ -213,9 +213,7 @@ export function exportProgressionToMidi(progression: Progression): Uint8Array {
  * Download MIDI file
  */
 export function downloadMidi(midiData: Uint8Array, filename: string): void {
-  // Create a proper Uint8Array with ArrayBuffer
-  const buffer = new Uint8Array(midiData);
-  const blob = new Blob([buffer], { type: 'audio/midi' });
+  const blob = new Blob([midiData as BlobPart], { type: 'audio/midi' });
   const url = URL.createObjectURL(blob);
   
   const a = document.createElement('a');

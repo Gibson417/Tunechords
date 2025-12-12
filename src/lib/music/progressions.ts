@@ -118,16 +118,18 @@ export function createProgressionFromSymbols(
     const root = rootMatch[1] as NoteName;
     const suffix = symbol.slice(rootMatch[0].length);
 
-    // Determine chord type from suffix
+    // Determine chord type from suffix (check longer patterns first)
     let chordType = 'major';
-    if (suffix.includes('m7')) chordType = 'minor7';
+    if (suffix.includes('m7b5')) chordType = 'halfDiminished7';
+    else if (suffix.includes('dim7')) chordType = 'diminished7';
     else if (suffix.includes('maj7')) chordType = 'major7';
-    else if (suffix.includes('7')) chordType = 'dominant7';
-    else if (suffix.includes('m')) chordType = 'minor';
-    else if (suffix.includes('dim')) chordType = 'diminished';
-    else if (suffix.includes('aug')) chordType = 'augmented';
+    else if (suffix.includes('m7')) chordType = 'minor7';
     else if (suffix.includes('sus4')) chordType = 'sus4';
     else if (suffix.includes('sus2')) chordType = 'sus2';
+    else if (suffix.includes('dim')) chordType = 'diminished';
+    else if (suffix.includes('aug')) chordType = 'augmented';
+    else if (suffix.includes('7')) chordType = 'dominant7';
+    else if (suffix.includes('m')) chordType = 'minor';
 
     const chord = buildChord(root, chordType);
     
